@@ -1,0 +1,221 @@
+openapi: "3.0.0"
+
+info:
+  title: T Shirt Store API
+  description: The backend server for a store for T shirts
+  version: 1.0.0
+  contact: 
+    email: sdutt@sd.com
+    url: "http://sduttt.netlify.app/"
+
+# TODO: Update 
+servers: 
+  - url: "{protocol}localhost:4000/api/v1"
+    description: For localhost - secure
+    variables:
+      protocol:
+        enum:
+          - http://
+          - https://
+        default: http:// # This is the default protocol
+      
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+paths:
+  /sduttt:
+    get:
+      tags:
+        - String
+      summary: returns a greet message from sduttt
+      responses:
+        200: 
+          description: All good
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "mystring"
+
+        400:
+          description: Bad request
+
+  /sduttt/myobject:
+      get:
+      tags:
+        - Objects
+      summary: returns a object
+      responses:
+        200: 
+          description: All good
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: 
+                  name:
+                    type: string
+                    example: "sduttt"
+                  age:
+                    type: number
+                    example: 20
+        400:
+          description: Bad request
+
+  /sduttt/courses:
+    get:
+      tags:
+        - Array
+      summary: returns all courses
+      responses:
+        200: 
+          description: All good
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties: 
+                    id:
+                      type: number
+                    name:
+                      type: string
+                    price:
+                      type: number
+        400:
+          description: Bad request
+
+  /sduttt/courses/{courseId}:
+    get:
+      tags:
+        - String
+      summary: returns course based on requested id
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          default: 12
+          schema:
+            type: string
+            
+      responses:
+        200: 
+          description: All good
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: 
+                  id:
+                    type: number
+                  name:
+                    type: string
+                  price:
+                    type: number
+        400:
+          description: Bad request
+
+  /sduttt/adsdcourse:
+    post:
+      tags:
+        - String
+      summary: adds a course
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: 
+                id:
+                  type: number
+                name:
+                  type: string
+                price:
+                  type: number
+      responses:
+        200: 
+          description: All good
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: 
+                  id:
+                    type: number
+                  name:
+                    type: string
+                  price:
+                    type: number
+        400:
+          description: Bad request
+
+  /sduttt/coursequery:
+    get:
+      tags:
+        - String
+      summary: learning about query
+      parameters:
+        - name: location
+          in: query
+          required: true
+          default: "kolkata"
+          schema:
+            type: string
+            enum: [kolkata, delhi, mumbai]
+        - name: device
+          in: query
+          required: true
+          default: "mobile"
+          schema:
+            type: string
+            enum: [mobile, desktop, tablet]
+      responses:
+        200: 
+          description: All good
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: 
+                  location:
+                    type: string
+                  device:
+                    type: string
+        400:
+          description: Bad request
+
+  /sduttt/courseupload:
+    post:
+      tags:
+        - String
+      summary: Add images
+      parameters:
+        - in: header
+          name: auth
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: All good
+        400:
+          description: Bad request
