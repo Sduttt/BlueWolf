@@ -42,6 +42,8 @@ const userSchema = new mongoose.Schema({
     }
 })
 
+
+
 //encrypt password
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) {
@@ -69,7 +71,7 @@ userSchema.methods.getForgotPasswordToken = function () {
     //hash token and set to resetPasswordToken field
     this.forgotPasswordToken = crypto.createHash('SHA256').update(forgotToken).digest('hex')
 
-    this.forgotPasswordExpire = Date.now() + 10 * 60 * 1000;
+    this.forgotPasswordExpire = Date.now() + 2 * 60 * 60 * 1000;
 
     return forgotToken;
 
