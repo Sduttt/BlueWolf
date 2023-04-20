@@ -10,6 +10,8 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 //Routes:
 const home = require('./route/home');
 const user = require('./route/user');
+const product = require('./route/productRoute');
+const payment = require('./route/payment');
 
 
 //middlewares:
@@ -32,5 +34,7 @@ app.get('/signup', (req, res) => {
 //Router middlewares:
 app.use("/api/v1", home);
 app.use("/api/v1/user", user);
+app.use("/api/v1/product", product);
+app.use("/api/v1/payment", payment);
 
 module.exports = app;
