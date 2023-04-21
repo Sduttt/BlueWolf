@@ -12,6 +12,7 @@ const home = require('./route/home');
 const user = require('./route/user');
 const product = require('./route/productRoute');
 const payment = require('./route/payment');
+const order = require('./route/orderRoute');
 
 
 //middlewares:
@@ -36,5 +37,6 @@ app.use("/api/v1", home);
 app.use("/api/v1/user", user);
 app.use("/api/v1/product", product);
 app.use("/api/v1/payment", payment);
+app.use("/api/v1/order", order);
 
 module.exports = app;
