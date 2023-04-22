@@ -25,7 +25,7 @@ servers:
       url:
         enum:
           - localhost:4001
-          - lcotshirtstore.herokuapp.com
+          - redwolf.onrender.com
         default: localhost:4001
       protocol:
         enum:
@@ -63,7 +63,7 @@ paths:
         500:
           description: internal server error
   
-  /signup:
+  /user/signup:
     post:
       tags:
         - User
@@ -128,7 +128,7 @@ paths:
         500:
           description: internal server error
 
-  /login:
+  /user/login:
     post:
       tags:
         - User
@@ -183,7 +183,7 @@ paths:
         500:
           description: internal server error
 
-  /logout:
+  /user/logout:
     get:
       tags:
         - User
@@ -206,7 +206,7 @@ paths:
         500:
           description: internal server error
 
-  /forgotPassword:
+  /user/forgotPassword:
     post:
       tags:
         - User
@@ -238,7 +238,7 @@ paths:
         500:
           description: internal server error
 
-  /password/reset/{token}:
+  /user/resetpassword/{token}:
     post:
       tags:
         - User
@@ -299,7 +299,7 @@ paths:
         500:
           description: internal server error
 
-  /userdashboard:
+  /user/profile:
     get:
       tags:
         - User
@@ -340,7 +340,7 @@ paths:
         500:
           description: internal server error
 
-  /password/update:
+  /user/updatepassword:
     post:
       tags:
         - User
@@ -393,7 +393,7 @@ paths:
         500:
           description: internal server error
 
-  /userdashboard/update:
+  /user/profile/update:
     post:
       tags:
         - User
@@ -432,7 +432,7 @@ paths:
         500:
           description: internal server error
 
-  /admin/users:
+  /user/list:
     get:
       tags:
         - Admin
@@ -475,7 +475,7 @@ paths:
         500:
           description: internal server error
 
-  /admin/user/{id}:
+  /user/{id}:
     get:
       tags:
         - Admin
@@ -521,76 +521,8 @@ paths:
           description: Bad request
         500:
           description: internal server error
-    put:
-      tags:
-        - Admin
-      summary: If user is admin, he can update mentioned fields in user
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: name
-          in: formData
-          required: true
-          schema:
-            type: string
-        - name: email
-          in: formData
-          required: true
-          schema:
-            type: string
-        - name: role
-          in: formData
-          required: true
-          schema:
-            type: string
-            enum: [user, admin, manager]
-      requestBody: 
-      responses:
-        200:
-          description: All good success
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    success:
-                      type: boolean
-                  
-        400:
-          description: Bad request
-        500:
-          description: internal server error
-    delete:
-      tags:
-        - Admin
-      summary: If user is admin, delete the user with given id
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody: 
-      responses:
-        200:
-          description: All good success
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    success:
-                      type: boolean
-                  
-        400:
-          description: Bad request
-        500:
-          description: internal server error
-
-  /manager/users:
+    
+  /user/normalusers:
     get:
       tags:
         - Manager
@@ -633,7 +565,80 @@ paths:
         500:
           description: internal server error
 
-  /products:
+  /user/{id}/update:
+    
+    put:
+      tags:
+        - Admin
+      summary: If user is admin, he can update mentioned fields in user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: formData
+          required: true
+          schema:
+            type: string
+        - name: email
+          in: formData
+          required: true
+          schema:
+            type: string
+        - name: role
+          in: formData
+          required: true
+          schema:
+            type: string
+            enum: [user, admin, manager]
+      requestBody: 
+      responses:
+        200:
+          description: All good success
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                  
+        400:
+          description: Bad request
+        500:
+          description: internal server error
+    
+  /user/delete/{id}:
+    delete:
+      tags:
+        - Admin
+      summary: If user is admin, delete the user with given id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody: 
+      responses:
+        200:
+          description: All good success
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                  
+        400:
+          description: Bad request
+        500:
+          description: internal server error
+
+  /product:
     get:
       tags:
         - Product
@@ -779,7 +784,7 @@ paths:
         500:
           description: internal server error
 
-  /admin/products:
+  /product/foradmin:
     get:
       tags:
         - Admin
@@ -849,7 +854,7 @@ paths:
         500:
           description: internal server error
 
-  /admin/product/add:
+  /product/add:
     post:
       tags:
         - Admin
@@ -955,18 +960,17 @@ paths:
         500:
           description: internal server error
   
-  /admin/product/{id}:
+  /product/update/{id}: 
     put:
       tags:
         - Admin
-      summary: If admin, update the product. photos are optional to pass. Rest all body is set to be updated to what you pass here.
+      summary: If admin, update a product
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: string
-        
       requestBody:
         content:
           multipart/form-data:
@@ -979,6 +983,7 @@ paths:
                 - category
                 - stock
                 - brand
+                - photos
               properties:
                 name:
                   type: string
@@ -1064,19 +1069,18 @@ paths:
           description: Bad request
         500:
           description: internal server error
+
+  /product/delete/{id}:
     delete:
       tags:
         - Admin
-      summary: If admin, pass the id of product and product will be removed
+      summary: If admin, delete a product
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: string
-        
-      requestBody:
-        
       responses:
         200:
           description: All good success
@@ -1087,16 +1091,58 @@ paths:
                 properties:
                   success:
                     type: boolean
-                  message:
-                    type: string
-                  
+                  product:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      price: 
+                        type: number
+                      description: 
+                        type: string
+                      category: 
+                        type: string
+                      brand: 
+                        type: string
+                      ratings: 
+                        type: number
+                      numberOfReviews: 
+                        type: number
+                      user: 
+                        type: string
+                      photos: 
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            secure_url:
+                              type: string
+                      reviews: 
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            comment:
+                              type: string
+                            user:
+                              type: string
+                            name:
+                              type: string
+                            rating:
+                              type: number
         400:
           description: Bad request
         500:
           description: internal server error
 
-  /reviews:
-      get:
+  /product/reviews:
+      put:
         tags:
           - Product
         summary: A simple get request will give you all reviews for given products
@@ -1140,7 +1186,7 @@ paths:
           500:
             description: internal server error
   
-  /review:
+  /product/review:
       put:
         tags:
           - Product
@@ -1257,7 +1303,7 @@ paths:
           500:
             description: internal server error
 
-  /order/create:
+  /order/new:
     post:
       tags:
         - Order
@@ -1481,7 +1527,7 @@ paths:
         500:
           description: internal server error
 
-  /myorder:
+  /order/myorders:
     get:
       tags:
         - Order
@@ -1564,7 +1610,7 @@ paths:
         500:
           description: internal server error
 
-  /admin/orders:
+  /order/admin/all:
     get:
       tags:
         - Admin
@@ -1641,7 +1687,7 @@ paths:
         500:
           description: internal server error
 
-  /admin/order/{id}:
+  /order/admin/{id}:
     put:
       tags:
         - Admin
@@ -1762,7 +1808,7 @@ paths:
         500:
           description: internal server error
 
-  /stripekey:
+  /payment/send-stripe-key:
     get:
       tags:
         - Payment
@@ -1785,30 +1831,7 @@ paths:
         500:
           description: internal server error
 
-  /razorpaykey:
-    get:
-      tags:
-        - Payment
-      summary: gets you the public razorpay key
-      requestBody:
-        
-      responses:
-        200:
-          description: All good success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  razorpaykey:
-                    type: string
-                                 
-        400:
-          description: Bad request
-        500:
-          description: internal server error
-
-  /capturestripe:
+  /payment/stripe:
     post:
       tags:
         - Payment
@@ -1839,50 +1862,6 @@ paths:
                     type: number
                   client_secret:
                     type: string
-                                 
-        400:
-          description: Bad request
-        500:
-          description: internal server error
-
-  /capturerazorpay:
-    post:
-      tags:
-        - Payment
-      summary: send amount in number. Send amount after multiplying by 100. Check orders tab, not payments. Also request from swagger UI are not proper as to capture payment we need to send dummy card details.
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              required:
-                - amount
-              properties:
-                amount:
-                  type: number
-
-        
-      responses:
-        200:
-          description: All good success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  amount:
-                    type: number
-                  order:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      amount:
-                        type: number
-                      currency:
-                        type: string
                                  
         400:
           description: Bad request
